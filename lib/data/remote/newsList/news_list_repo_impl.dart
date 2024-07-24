@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:matricula/core/api_client.dart';
-import 'package:matricula/core/exceptions.dart';
+import 'package:matricula/app/api_client.dart';
+import 'package:matricula/app/exceptions.dart';
 import 'package:matricula/data/remote/newsList/models/news_list_model.dart';
 import 'package:matricula/data/remote/newsList/news_list_repo.dart';
 

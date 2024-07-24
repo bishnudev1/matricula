@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:matricula/core/exceptions.dart';
+import 'package:matricula/app/exceptions.dart';
 import 'package:matricula/data/remote/newsList/models/news_list_model.dart';
 
 abstract class BaseNewsListRepo {
