@@ -1,19 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:matricula/helpers/base_screen_view.dart';
-import 'package:matricula/helpers/base_view_model.dart';
 import 'package:matricula/routes/app_routes.dart';
 import 'package:matricula/utils/app_sizes.dart';
-import 'package:matricula/view/screens/auth/auth_view_model.dart';
 import 'package:matricula/view/screens/chapterDetail/chapter_detail_view_model.dart';
-import 'package:pinput/pinput.dart';
 import 'package:matricula/utils/colors.dart';
 import 'package:matricula/utils/themes.dart';
-import 'package:pinput/pinput.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class ChapterDetail extends ConsumerStatefulWidget {
   const ChapterDetail({super.key});
@@ -59,7 +51,7 @@ class _ChapterDetailState extends ConsumerState<ChapterDetail>
             InkWell(
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
-              onTap: () => _viewModel.navigateToTest(),
+              onTap: () => _viewModel.navigateToTest(context),
               child: Row(
                 children: [
                   Image.asset(
@@ -87,7 +79,7 @@ class _ChapterDetailState extends ConsumerState<ChapterDetail>
             InkWell(
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
-              onTap: () => _viewModel.navigateToTest(),
+              onTap: () => _viewModel.navigateToTest(context),
               child: Row(
                 children: [
                   Image.asset(
@@ -115,7 +107,7 @@ class _ChapterDetailState extends ConsumerState<ChapterDetail>
             InkWell(
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
-              onTap: () => _viewModel.navigateToNotes(),
+              onTap: () => _viewModel.navigateToNotes(context),
               child: Row(
                 children: [
                   Image.asset(

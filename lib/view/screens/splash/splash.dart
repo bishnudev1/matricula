@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:matricula/helpers/base_screen_view.dart';
-import 'package:matricula/routes/app_routes.dart';
 import 'package:matricula/utils/colors.dart';
-import 'package:matricula/view/screens/auth/login.dart';
 import 'package:matricula/view/screens/splash/splash_view_model.dart';
 
 class Splash extends ConsumerStatefulWidget {
@@ -19,16 +16,9 @@ class _SplashState extends ConsumerState<Splash> with BaseScreenView {
   @override
   void initState() {
     super.initState();
-    // _viewModel = ref.read(splashViewModelProvider);
-    // _viewModel.view = this;
-    // _viewModel.navigateToSecondScreen();
-    // navigateToSecondScreen();
-    // Future.delayed(const Duration(milliseconds: 500)).then((value) => {
-    //       print("Splash Screen"),
-    //       Navigator.push(context, MaterialPageRoute(builder: (context) {
-    //         return const Login();
-    //       }))
-    //     });
+    _viewModel = ref.read(splashViewModelProvider);
+    _viewModel.view = this;
+    _viewModel.navigateToSecondScreen(context);
   }
 
   @override
@@ -51,25 +41,17 @@ class _SplashState extends ConsumerState<Splash> with BaseScreenView {
     );
   }
 
-  @override
-  void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-    // TODO: implement navigateToScreen
-    // context.pushNamed(
-    //   appRoute.name, params: params ?? {},
-    //   // {"fid": NavBarScreens.data[1].id},
-    // );
-  }
-
-  // void navigateToSecondScreen() {
-  //   Future.delayed(const Duration(milliseconds: 500)).then((value) => {
-  //         MaterialPageRoute(builder: (context) {
-  //           return const Login();
-  //         })
-  //       });
+  // @override
+  // void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
+  //   // TODO: implement navigateToScreen
+  //   // context.pushNamed(
+  //   //   appRoute.name, params: params ?? {},
+  //   //   // {"fid": NavBarScreens.data[1].id},
+  //   // );
   // }
 
-  @override
-  void showSnackbar(String message, {Color? color}) {
-    // TODO: implement showSnackbar
-  }
+  // @override
+  // void showSnackbar(String message, {Color? color}) {
+  //   // TODO: implement showSnackbar
+  // }
 }

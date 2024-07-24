@@ -1,36 +1,40 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:matricula/helpers/base_screen_view.dart';
 import 'package:matricula/helpers/base_view_model.dart';
 import 'package:matricula/routes/app_routes.dart';
+import 'package:matricula/utils/navigate.dart';
+import 'package:matricula/utils/showtoast.dart';
 
 final dashboardViewModel =
     ChangeNotifierProvider((ref) => DashboardViewModel());
 
 class DashboardViewModel extends BaseViewModel<BaseScreenView> {
-  void showSnackbar(String message) {
-    view?.showSnackbar("wohooo!!!!");
+  void showSnackbar(String message, BuildContext context) {
+    // view?.showSnackbar("wohooo!!!!");
+    showToast(message, context);
   }
 
-  void navigateToLogin() {
-    view?.navigateToScreen(AppRoute.login);
+  void navigateToLogin(BuildContext context) {
+    navigateToScreen(AppRoute.login, context);
   }
 
-  void navigateToprofile() {
-    view?.navigateToScreen(AppRoute.profile);
+  void navigateToprofile(BuildContext context) {
+    navigateToScreen(AppRoute.profile, context);
   }
 
-  void navigateToChapters() {
-    view?.navigateToScreen(AppRoute.chapter);
+  void navigateToChapters(BuildContext context) {
+    navigateToScreen(AppRoute.chapter, context);
   }
 
-  dynamic Function()? navigate(int index) {
+  dynamic Function()? navigate(int index, BuildContext? context) {
     switch (index) {
       case 0:
-        view?.navigateToScreen(AppRoute.library);
+        navigateToScreen(AppRoute.library, context!);
 
         break;
       case 1:
-        view?.navigateToScreen(AppRoute.download);
+        navigateToScreen(AppRoute.download, context!);
 
         break;
       // case 2:
@@ -38,15 +42,15 @@ class DashboardViewModel extends BaseViewModel<BaseScreenView> {
 
       //   break;
       case 3:
-        view?.navigateToScreen(AppRoute.progress);
+        navigateToScreen(AppRoute.progress, context!);
 
         break;
       case 4:
-        view?.navigateToScreen(AppRoute.subscribe);
+        navigateToScreen(AppRoute.subscribe, context!);
 
         break;
       case 5:
-        view?.navigateToScreen(AppRoute.refer);
+        navigateToScreen(AppRoute.refer, context!);
 
         break;
       // case 4:

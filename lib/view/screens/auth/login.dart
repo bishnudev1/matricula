@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:matricula/helpers/base_screen_view.dart';
-import 'package:matricula/routes/app_routes.dart';
 import 'package:matricula/utils/app_sizes.dart';
 import 'package:matricula/utils/colors.dart';
 import 'package:matricula/utils/themes.dart';
@@ -119,7 +117,7 @@ class _LoginState extends ConsumerState<Login> with BaseScreenView {
                 ),
                 const SizedBox(height: AppSizes.p16),
                 InkWell(
-                  onTap: () => _viewModel.navigateToRegistration(),
+                  onTap: () => _viewModel.navigateToRegistration(context),
                   child: Align(
                     child: RichText(
                       textAlign: TextAlign.center,
@@ -176,7 +174,7 @@ class _LoginState extends ConsumerState<Login> with BaseScreenView {
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
           onTap: () {
-            _viewModel.navigateToForgetPassword();
+            _viewModel.navigateToForgetPassword(context);
           },
           child: Container(
             alignment: Alignment.topRight,
@@ -203,7 +201,7 @@ class _LoginState extends ConsumerState<Login> with BaseScreenView {
             ),
             // style: ButtonStyle(),
             onPressed: () {
-              _viewModel.navigateTodashboard();
+              _viewModel.navigateTodashboard(context);
             },
             child: const Text("Login"),
           ),
@@ -274,7 +272,7 @@ class _LoginState extends ConsumerState<Login> with BaseScreenView {
                 // listenForMultipleSmsOnAndroid: true,
                 defaultPinTheme: AppThemes.pinputTheme,
                 validator: (value) {
-                  return value == '2222' ? null : 'Pin is incorrect';
+                  return value == '123456' ? null : 'Pin is incorrect';
                 },
                 // onClipboardFound: (value) {
                 //   debugPrint('onClipboardFound: $value');
@@ -343,7 +341,7 @@ class _LoginState extends ConsumerState<Login> with BaseScreenView {
                   // style: ButtonStyle(),
                   onPressed: () {
                     setState(() {
-                      _viewModel.navigateTodashboard();
+                      _viewModel.navigateTodashboard(context);
                     });
                   },
                   child: const Text("Login"),
@@ -369,17 +367,17 @@ class _LoginState extends ConsumerState<Login> with BaseScreenView {
     );
   }
 
-  @override
-  void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-    // context.pushNamed(
-    //     // appRoute.name, params: params ?? {},
-    //     // {"fid": NavBarScreens.data[1].id},
-    //     );
-    // TODO: implement navigateToScreen
-  }
+  // @override
+  // void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
+  //   // context.pushNamed(
+  //   //     // appRoute.name, params: params ?? {},
+  //   //     // {"fid": NavBarScreens.data[1].id},
+  //   //     );
+  //   // TODO: implement navigateToScreen
+  // }
 
-  @override
-  void showSnackbar(String message, {Color? color}) {
-    // TODO: implement showSnackbar
-  }
+  // @override
+  // void showSnackbar(String message, {Color? color}) {
+  //   // TODO: implement showSnackbar
+  // }
 }

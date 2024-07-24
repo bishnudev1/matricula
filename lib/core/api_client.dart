@@ -32,7 +32,7 @@ class ApiClient {
   ) async {
     try {
       return await dio.post(path, data: data);
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       Logger.write(e.message!);
       throw ApiException(e.message!);
     }
@@ -41,7 +41,7 @@ class ApiClient {
   Future<Response<Map<String, dynamic>>> put(String path, dynamic data) async {
     try {
       return await dio.put(path, data: data);
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       Logger.write(e.message!);
       throw ApiException(e.message!);
     }
@@ -50,7 +50,7 @@ class ApiClient {
   Future<Response<Map<String, dynamic>>> delete(String path) async {
     try {
       return await dio.delete(path);
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       Logger.write(e.message!);
       throw ApiException(e.message!);
     }
@@ -59,7 +59,7 @@ class ApiClient {
   Future<Response<Map<String, dynamic>>> get(String path) async {
     try {
       return await dio.get(path);
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       Logger.write(e.message!);
       throw ApiException(e.message!);
     }

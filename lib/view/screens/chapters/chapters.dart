@@ -1,20 +1,12 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:matricula/helpers/base_screen_view.dart';
-import 'package:matricula/helpers/base_view_model.dart';
 import 'package:matricula/routes/app_routes.dart';
 import 'package:matricula/utils/app_sizes.dart';
-import 'package:matricula/view/screens/auth/auth_view_model.dart';
 import 'package:matricula/view/screens/chapters/chapter_view_model.dart';
-import 'package:pinput/pinput.dart';
 import 'package:matricula/utils/colors.dart';
 import 'package:matricula/utils/themes.dart';
-import 'package:pinput/pinput.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class Chapter extends ConsumerStatefulWidget {
   const Chapter({super.key});
@@ -120,7 +112,7 @@ class _ChapterState extends ConsumerState<Chapter> with BaseScreenView {
 
   Widget chaptersCard() {
     return InkWell(
-      onTap: () => _viewModel.navigateToChapterDetail(),
+      onTap: () => _viewModel.navigateToChapterDetail(context),
       child: Container(
         padding: const EdgeInsets.all(AppSizes.p16),
         decoration: BoxDecoration(

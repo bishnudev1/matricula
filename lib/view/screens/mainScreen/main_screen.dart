@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:matricula/helpers/base_screen_view.dart';
-import 'package:matricula/helpers/base_view_model.dart';
 import 'package:matricula/routes/app_routes.dart';
 import 'package:matricula/utils/app_sizes.dart';
-import 'package:matricula/view/screens/auth/auth_view_model.dart';
 import 'package:matricula/view/screens/dashboard/dashboard.dart';
 import 'package:matricula/view/screens/dashboard/dashboard_view_model.dart';
-import 'package:pinput/pinput.dart';
 import 'package:matricula/utils/colors.dart';
 import 'package:matricula/utils/themes.dart';
-import 'package:pinput/pinput.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 
@@ -72,7 +65,7 @@ class _MainScreenViewState extends ConsumerState<MainScreenView>
                 ),
               ),
               InkWell(
-                onTap: () => _viewModel.navigateToprofile(),
+                onTap: () => _viewModel.navigateToprofile(context),
                 child: Container(
                   height: 90,
                   width: 50,
@@ -156,7 +149,7 @@ class _MainScreenViewState extends ConsumerState<MainScreenView>
 class _SliderView extends ConsumerStatefulWidget {
   final Function(String)? onItemClick;
 
-  const _SliderView({Key? key, this.onItemClick}) : super(key: key);
+  const _SliderView({this.onItemClick});
 
   @override
   ConsumerState<_SliderView> createState() => _SliderViewState();
@@ -204,7 +197,7 @@ class _SliderViewState extends ConsumerState<_SliderView> {
           InkWell(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            onTap: () => _viewModel.navigateToprofile(),
+            onTap: () => _viewModel.navigateToprofile(context),
             child: CircleAvatar(
               radius: 65,
               backgroundColor: primaryColor,
@@ -309,7 +302,7 @@ class _SliderViewState extends ConsumerState<_SliderView> {
                 (index) => _SliderMenuItem(
                   iconData: icons[index],
                   title: items[index],
-                  onTap: () => _viewModel.navigate(index),
+                  onTap: () => _viewModel.navigate(index, context),
                 ),
               ),
             ],
@@ -344,11 +337,10 @@ class _SliderMenuItem extends StatelessWidget {
   final Function() onTap;
 
   const _SliderMenuItem({
-    Key? key,
     required this.title,
     required this.iconData,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:matricula/helpers/base_screen_view.dart';
-import 'package:matricula/routes/app_routes.dart';
 import 'package:matricula/utils/app_sizes.dart';
 import 'package:matricula/view/screens/auth/auth_view_model.dart';
 import 'package:pinput/pinput.dart';
 import 'package:matricula/utils/colors.dart';
 import 'package:matricula/utils/themes.dart';
-import 'package:pinput/pinput.dart';
 
 class Registration extends ConsumerStatefulWidget {
   const Registration({super.key});
@@ -380,7 +377,7 @@ class _RegistrationState extends ConsumerState<Registration>
                 ),
                 // style: ButtonStyle(),
                 onPressed: () {
-                  _viewModel.navigateTodashboard();
+                  _viewModel.navigateTodashboard(context);
                 },
                 child: const Text("Sign Up"),
               ),
@@ -392,17 +389,17 @@ class _RegistrationState extends ConsumerState<Registration>
     );
   }
 
-  @override
-  void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-    // context.pushNamed(
-    //   appRoute.name, params: params ?? {},
-    //   // {"fid": NavBarScreens.data[1].id},
-    // );
-    // TODO: implement navigateToScreen
-  }
+  // @override
+  // void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
+  //   // context.pushNamed(
+  //   //   appRoute.name, params: params ?? {},
+  //   //   // {"fid": NavBarScreens.data[1].id},
+  //   // );
+  //   // TODO: implement navigateToScreen
+  // }
 
-  @override
-  void showSnackbar(String message, {Color? color}) {
-    // TODO: implement showSnackbar
-  }
+  // @override
+  // void showSnackbar(String message, {Color? color}) {
+  //   // TODO: implement showSnackbar
+  // }
 }

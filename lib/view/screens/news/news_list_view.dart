@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:matricula/data/remote/newsList/models/news_list_model.dart';
 import 'package:matricula/helpers/base_screen_view.dart';
-import 'package:matricula/routes/app_routes.dart';
 import 'package:matricula/view/screens/news/news_list_view_model.dart';
 
 class NewsListView extends ConsumerStatefulWidget {
-  const NewsListView({Key? key}) : super(key: key);
+  const NewsListView({super.key});
 
   @override
   ConsumerState<NewsListView> createState() => _NewsListViewState();
@@ -21,7 +19,7 @@ class _NewsListViewState extends ConsumerState<NewsListView>
   void initState() {
     // _viewModel = ref.read('newsListViewModel');
     _viewModel.attachView(this);
-    _viewModel.initialise();
+    _viewModel.initialise("News API has been initialized...", context);
     super.initState();
   }
 
@@ -94,20 +92,20 @@ class _NewsListViewState extends ConsumerState<NewsListView>
           );
   }
 
-  @override
-  void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-    // context.pushNamed(appRoute.name, params: params ?? {},
-    //     // {"fid": NavBarScreens.data[1].id},
-    //     );
-  }
+  // @override
+  // void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
+  //   // context.pushNamed(appRoute.name, params: params ?? {},
+  //   //     // {"fid": NavBarScreens.data[1].id},
+  //   //     );
+  // }
 
-  @override
-  void showSnackbar(String message, {Color? color}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: color,
-      ),
-    );
-  }
+  // @override
+  // void showSnackbar(String message, {Color? color}) {
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     SnackBar(
+  //       content: Text(message),
+  //       backgroundColor: color,
+  //     ),
+  //   );
+  // }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:matricula/helpers/base_screen_view.dart';
 import 'package:matricula/routes/app_routes.dart';
 import 'package:matricula/utils/app_sizes.dart';

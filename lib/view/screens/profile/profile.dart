@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:matricula/helpers/base_screen_view.dart';
-import 'package:matricula/routes/app_routes.dart';
 import 'package:matricula/utils/app_sizes.dart';
 import 'package:matricula/utils/colors.dart';
 import 'package:matricula/utils/themes.dart';
@@ -156,13 +155,13 @@ class _ProfileState extends ConsumerState<Profile> with BaseScreenView {
     );
   }
 
-  @override
-  void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-    // TODO: implement navigateToScreen
-  }
+  // @override
+  // void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
+  //   // TODO: implement navigateToScreen
+  // }
 
-  @override
-  void showSnackbar(String message, {Color? color}) {
-    // TODO: implement showSnackbar
-  }
+  // @override
+  // void showSnackbar(String message, {Color? color}) {
+  //   // TODO: implement showSnackbar
+  // }
 }
