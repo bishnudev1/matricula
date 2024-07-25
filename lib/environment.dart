@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:matricula/app.dart';
 import 'package:matricula/services/shared_preference_service.dart';
 import 'package:matricula/utils/logger.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 enum EnvType {
   DEVELOPMENT,
@@ -25,8 +26,7 @@ class Environment {
 
   Future<void> _init() async {
     WidgetsFlutterBinding.ensureInitialized();
-    // await Firebase.initializeApp(
-    // );
+    await Firebase.initializeApp();
     // await FirebaseMessagingProvider.init();
     await EasyLocalization.ensureInitialized();
     await SharedPreferenceService.init();

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:matricula/helpers/base_screen_view.dart';
+import 'package:matricula/providers/auth_providers.dart';
 import 'package:matricula/utils/app_sizes.dart';
 import 'package:matricula/utils/colors.dart';
 import 'package:matricula/utils/themes.dart';
@@ -110,10 +111,18 @@ class _LoginState extends ConsumerState<Login> with BaseScreenView {
                       height: 40,
                     ),
                     const SizedBox(width: AppSizes.p28),
-                    Image.asset(
-                      "assets/images/google.png",
-                      height: 40,
-                    ),
+                    Consumer(builder: (context, ref, child) {
+                      final _viewModel = ref.read(authViewModel);
+                      return InkWell(
+                        onTap: () {
+                          _viewModel.handleGoogleSignIn(context, ref);
+                        },
+                        child: Image.asset(
+                          "assets/images/google.png",
+                          height: 40,
+                        ),
+                      );
+                    }),
                   ],
                 ),
                 const SizedBox(height: AppSizes.p16),
