@@ -18,7 +18,7 @@ class Dashboard extends ConsumerStatefulWidget {
 }
 
 class _DashboardState extends ConsumerState<Dashboard> with BaseScreenView {
-  late final DashboardViewModel _viewModel;
+  // late final DashboardViewModel _viewModel;
   List<String> subjectsImage = [
     "assets/images/physics.png",
     "assets/images/biology.png",
@@ -33,115 +33,123 @@ class _DashboardState extends ConsumerState<Dashboard> with BaseScreenView {
     const Color(0xFF6C99FE),
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    _viewModel = ref.read(dashboardViewModel);
-    // _viewModel.attachView(this);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _viewModel = ref.read(dashboardViewModel);
+  //   _viewModel.attachView(this);
+  // }
 
   @override
   Widget build(BuildContext context) {
+    final _viewModel = ref.watch(dashboardViewProviders);
     return Scaffold(
       backgroundColor: kWhite,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              // margin: EdgeInsets.all(AppSizes.p16),
-              padding: const EdgeInsets.all(
-                AppSizes.p16,
-              ),
+      body: _viewModel.isLoading
+          ? Center(
+              child: CircularProgressIndicator(
+              color: primaryColor,
+            ))
+          : SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Good Morning ",
-                    style: AppThemes.lightTheme.textTheme.bodySmall
-                        ?.copyWith(color: primaryColor),
+                  Container(
+                    // margin: EdgeInsets.all(AppSizes.p16),
+                    padding: const EdgeInsets.all(
+                      AppSizes.p16,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Good Morning ",
+                          style: AppThemes.lightTheme.textTheme.bodySmall
+                              ?.copyWith(color: primaryColor),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              _viewModel.user.displayName?.split(' ').first ??
+                                  "",
+                              style: AppThemes.lightTheme.textTheme.bodyLarge
+                                  ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: primaryColor,
+                                fontSize: 25,
+                              ),
+                            ),
+                            Text(
+                              "Class 9",
+                              style: AppThemes.lightTheme.textTheme.bodySmall
+                                  ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: primaryColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Swapnil",
-                        style:
-                            AppThemes.lightTheme.textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: primaryColor,
-                          fontSize: 25,
+                  const SizedBox(height: AppSizes.p16),
+                  SizedBox(
+                    height: 200,
+                    child: Swiper(
+                      itemCount: 10,
+                      // shrinkWrap: true,
+                      itemBuilder: (context, index) => Container(
+                        height: 120,
+                        width: MediaQuery.of(context).size.width - 16,
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: AppSizes.p16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          image: const DecorationImage(
+                            fit: BoxFit.fill,
+                            image: NetworkImage(
+                              "https://estudentbook.com/admin/images/times_images/1641875089-WBJEE%202022-%20Last%20Date%20To%20Register-02.png",
+                            ),
+                          ),
                         ),
                       ),
-                      Text(
-                        "Class 9",
-                        style:
-                            AppThemes.lightTheme.textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: primaryColor,
+                    ),
+                  ),
+                  const SizedBox(height: AppSizes.p16),
+                  ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: 2,
+                    itemBuilder: (contex, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSizes.p16,
+                          vertical: AppSizes.p8,
                         ),
-                      ),
-                    ],
+                        child: GridView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: 4,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 1.5,
+                            crossAxisSpacing: AppSizes.p16,
+                            mainAxisSpacing: AppSizes.p8,
+                          ),
+                          itemBuilder: (context, index) => subjectCard(
+                            context,
+                            subjectsImage[index],
+                            subjects[index],
+                            colors[index],
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: AppSizes.p16),
-            SizedBox(
-              height: 200,
-              child: Swiper(
-                itemCount: 10,
-                // shrinkWrap: true,
-                itemBuilder: (context, index) => Container(
-                  height: 120,
-                  width: MediaQuery.of(context).size.width - 16,
-                  margin: const EdgeInsets.symmetric(horizontal: AppSizes.p16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    image: const DecorationImage(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(
-                        "https://estudentbook.com/admin/images/times_images/1641875089-WBJEE%202022-%20Last%20Date%20To%20Register-02.png",
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: AppSizes.p16),
-            ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: 2,
-              itemBuilder: (contex, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSizes.p16,
-                    vertical: AppSizes.p8,
-                  ),
-                  child: GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: 4,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 1.5,
-                      crossAxisSpacing: AppSizes.p16,
-                      mainAxisSpacing: AppSizes.p8,
-                    ),
-                    itemBuilder: (context, index) => subjectCard(
-                      context,
-                      subjectsImage[index],
-                      subjects[index],
-                      colors[index],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -152,7 +160,7 @@ class _DashboardState extends ConsumerState<Dashboard> with BaseScreenView {
     Color color,
   ) {
     return InkWell(
-      onTap: () => _viewModel.navigateToChapters(context),
+      // onTap: () => _viewModel.navigateToChapters(context),
       child: DecoratedBox(
         // width: MediaQuery.of(context).size.width / 2,
         decoration: BoxDecoration(
@@ -247,18 +255,4 @@ class _DashboardState extends ConsumerState<Dashboard> with BaseScreenView {
       ),
     );
   }
-
-  // @override
-  // void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-  //   // TODO: implement navigateToScreen
-  //   // context.pushNamed(
-  //   //   appRoute.name, params: params ?? {},
-  //   //   // {"fid": NavBarScreens.data[1].id},
-  //   // );
-  // }
-
-  // @override
-  // void showSnackbar(String message, {Color? color}) {
-  //   // TODO: implement showSnackbar
-  // }
 }

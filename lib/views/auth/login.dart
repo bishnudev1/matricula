@@ -1,9 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:matricula/helpers/base_screen_view.dart';
-import 'package:matricula/providers/auth_providers.dart';
 import 'package:matricula/utils/app_sizes.dart';
 import 'package:matricula/utils/colors.dart';
 import 'package:matricula/utils/themes.dart';
@@ -20,21 +21,23 @@ class Login extends ConsumerStatefulWidget {
 
 class _LoginState extends ConsumerState<Login> with BaseScreenView {
   int? groupValue = 0;
-  late AuthViewModel _viewModel;
+  // late AuthViewModel _viewModel;
   final pinController = TextEditingController();
   final focusNode = FocusNode();
   bool isOtpReceived = false;
 
-  @override
-  void initState() {
-    _viewModel = ref.read(authViewModel);
-    _viewModel.attachView(this);
-    // _viewModel.initialise();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   _viewModel = ref.read(authViewModel);
+  //   _viewModel.attachView(this);
+  //   // _viewModel.initialise();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
+    final _viewModel = ref.watch(authViewModel);
+    log("build: ${_viewModel.isLoading}");
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -106,22 +109,32 @@ class _LoginState extends ConsumerState<Login> with BaseScreenView {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      "assets/images/facebook.png",
-                      height: 40,
-                    ),
+                    Consumer(builder: (context, ref, child) {
+                      return _viewModel.isLoading
+                          ? CircularProgressIndicator()
+                          : InkWell(
+                              onTap: () {
+                                _viewModel.handleFacebookSignIn(context, ref);
+                              },
+                              child: Image.asset(
+                                "assets/images/facebook.png",
+                                height: 40,
+                              ),
+                            );
+                    }),
                     const SizedBox(width: AppSizes.p28),
                     Consumer(builder: (context, ref, child) {
-                      final _viewModel = ref.read(authViewModel);
-                      return InkWell(
-                        onTap: () {
-                          _viewModel.handleGoogleSignIn(context, ref);
-                        },
-                        child: Image.asset(
-                          "assets/images/google.png",
-                          height: 40,
-                        ),
-                      );
+                      return _viewModel.isLoading
+                          ? CircularProgressIndicator()
+                          : InkWell(
+                              onTap: () {
+                                _viewModel.handleGoogleSignIn(context, ref);
+                              },
+                              child: Image.asset(
+                                "assets/images/google.png",
+                                height: 40,
+                              ),
+                            );
                     }),
                   ],
                 ),
@@ -184,7 +197,7 @@ class _LoginState extends ConsumerState<Login> with BaseScreenView {
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
           onTap: () {
-            _viewModel.navigateToForgetPassword(context);
+            // _viewModel.navigateToForgetPassword(context);
           },
           child: Container(
             alignment: Alignment.topRight,
@@ -211,7 +224,7 @@ class _LoginState extends ConsumerState<Login> with BaseScreenView {
             ),
             // style: ButtonStyle(),
             onPressed: () {
-              _viewModel.navigateTodashboard(context);
+              // _viewModel.navigateTodashboard(context);
             },
             child: const Text("Login"),
           ),
@@ -351,7 +364,7 @@ class _LoginState extends ConsumerState<Login> with BaseScreenView {
                   // style: ButtonStyle(),
                   onPressed: () {
                     setState(() {
-                      _viewModel.navigateTodashboard(context);
+                      // _viewModel.navigateTodashboard(context);
                     });
                   },
                   child: const Text("Login"),

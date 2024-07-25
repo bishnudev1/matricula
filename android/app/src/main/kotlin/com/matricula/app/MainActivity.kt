@@ -1,4 +1,4 @@
-package com.example.matricula
+package com.matricula.app
 
 import io.flutter.embedding.android.FlutterActivity
 

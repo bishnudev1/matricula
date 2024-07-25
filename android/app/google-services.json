@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "947207434897",
+    "project_id": "matricula-28dd0",
+    "storage_bucket": "matricula-28dd0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:947207434897:android:29d78baf4034f322fa0530",
+        "android_client_info": {
+          "package_name": "com.matricula.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "947207434897-gu72i93kehr6jk51idbjnbk23vgdk5cd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.matricula.app",
+            "certificate_hash": "4870627ceeda3a6951d64b2e8af384fadfd55ac1"
+          }
+        },
+        {
+          "client_id": "947207434897-l5bt2bjo5obcsd7vctr2e56b26n3410f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7_RPq1Tn7E7Hv1eNKzhkvqELLPQKfYXo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "947207434897-l5bt2bjo5obcsd7vctr2e56b26n3410f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "947207434897-okp6v29r11aebotjei2sv4tu9eh5a6ie.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.matricula"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

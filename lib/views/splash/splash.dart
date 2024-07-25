@@ -18,7 +18,7 @@ class _SplashState extends ConsumerState<Splash> with BaseScreenView {
     super.initState();
     _viewModel = ref.read(splashViewModelProvider);
     _viewModel.view = this;
-    _viewModel.navigateToSecondScreen(context);
+    _viewModel.navigateToSecondScreen(context, ref);
   }
 
   @override

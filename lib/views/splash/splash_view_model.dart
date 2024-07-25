@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:matricula/helpers/base_screen_view.dart';
 import 'package:matricula/helpers/base_view_model.dart';
 import 'package:matricula/app/app_routes.dart';
+import 'package:matricula/providers/auth_providers.dart';
 import 'package:matricula/utils/navigate.dart';
 import 'package:matricula/utils/showtoast.dart';
 
@@ -15,9 +16,11 @@ class SplashViewModel extends BaseViewModel<BaseScreenView> {
     showToast(message, context);
   }
 
-  void navigateToSecondScreen(BuildContext context) {
+  void navigateToSecondScreen(BuildContext context, WidgetRef ref) {
     Future.delayed(const Duration(seconds: 3)).then((value) => {
-          navigateToScreen(AppRoute.login, context),
+          ref.read(authProviders).isSignedIn
+              ? navigateToScreen(AppRoute.mainScreenView, context)
+              : navigateToScreen(AppRoute.login, context)
         });
   }
 }

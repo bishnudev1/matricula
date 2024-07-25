@@ -65,9 +65,9 @@ class _ProfileState extends ConsumerState<Profile> with BaseScreenView {
                 decoration: BoxDecoration(
                   border: Border.all(color: primaryColor, width: 2),
                   shape: BoxShape.circle,
-                  image: const DecorationImage(
+                  image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: AssetImage("assets/images/student.png"),
+                    image: NetworkImage(_viewModel.user.photoURL ?? ""),
                   ),
                 ),
               ),
@@ -75,7 +75,7 @@ class _ProfileState extends ConsumerState<Profile> with BaseScreenView {
             const SizedBox(height: AppSizes.p8),
             Center(
               child: Text(
-                "Swapnil Chatterjee",
+                _viewModel.user.displayName ?? "",
                 style: AppThemes.lightTheme.textTheme.bodySmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: primaryColor,

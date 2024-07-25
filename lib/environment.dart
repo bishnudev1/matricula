@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:matricula/app.dart';
+import 'package:matricula/firebase_options.dart';
 import 'package:matricula/services/shared_preference_service.dart';
 import 'package:matricula/utils/logger.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,7 +27,9 @@ class Environment {
 
   Future<void> _init() async {
     WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     // await FirebaseMessagingProvider.init();
     await EasyLocalization.ensureInitialized();
     await SharedPreferenceService.init();

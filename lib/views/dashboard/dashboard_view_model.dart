@@ -1,15 +1,31 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:matricula/helpers/base_screen_view.dart';
 import 'package:matricula/helpers/base_view_model.dart';
 import 'package:matricula/app/app_routes.dart';
+import 'package:matricula/providers/auth_providers.dart';
 import 'package:matricula/utils/navigate.dart';
 import 'package:matricula/utils/showtoast.dart';
 
-final dashboardViewModel =
+final dashboardViewProviders =
     ChangeNotifierProvider((ref) => DashboardViewModel());
 
 class DashboardViewModel extends BaseViewModel<BaseScreenView> {
+  bool isLoading = false;
+
+  User? _user;
+
+  User get user => _user!;
+
+  DashboardViewModel() {
+    _user = FirebaseAuth.instance.currentUser;
+    log("User: ${_user!.displayName}");
+  }
   void showSnackbar(String message, BuildContext context) {
     // view?.showSnackbar("wohooo!!!!");
     showToast(message, context);
@@ -25,6 +41,28 @@ class DashboardViewModel extends BaseViewModel<BaseScreenView> {
 
   void navigateToChapters(BuildContext context) {
     navigateToScreen(AppRoute.chapter, context);
+  }
+
+  void handleSignOut(BuildContext context, WidgetRef ref) async {
+    log("Called signout");
+    if (isLoading) {
+      return;
+    }
+    try {
+      isLoading = true;
+      notifyListeners();
+      final auth = ref.read(authProviders);
+      await auth.signOut(context);
+    } on PlatformException catch (e) {
+      log(e.message.toString());
+    } on FirebaseAuthException catch (e) {
+      log(e.message.toString());
+    } catch (e) {
+      log(e.toString());
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 
   dynamic Function()? navigate(int index, BuildContext? context) {
@@ -53,10 +91,6 @@ class DashboardViewModel extends BaseViewModel<BaseScreenView> {
         navigateToScreen(AppRoute.refer, context!);
 
         break;
-      // case 4:
-      //   view?.navigateToScreen(AppRoute.subscribe);
-
-      //   break;
 
       default:
         () {};

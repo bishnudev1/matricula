@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:matricula/helpers/base_screen_view.dart';
 import 'package:matricula/app/app_routes.dart';
+import 'package:matricula/providers/auth_providers.dart';
 import 'package:matricula/utils/app_sizes.dart';
 import 'package:matricula/utils/colors.dart';
 import 'package:matricula/utils/themes.dart';
@@ -8,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:matricula/views/dashboard/dashboard.dart';
 import 'package:matricula/views/dashboard/dashboard_view_model.dart';
+import 'package:matricula/views/mainScreen/main_screen_view_model.dart';
 
 class MainScreenView extends ConsumerStatefulWidget {
   const MainScreenView({super.key});
@@ -24,7 +28,7 @@ class _MainScreenViewState extends ConsumerState<MainScreenView>
   @override
   void initState() {
     super.initState();
-    _viewModel = ref.read(dashboardViewModel);
+    _viewModel = ref.read(dashboardViewProviders);
     _viewModel.attachView(this);
   }
 
@@ -72,9 +76,9 @@ class _MainScreenViewState extends ConsumerState<MainScreenView>
                   margin: const EdgeInsets.all(AppSizes.p8),
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
-                    image: const DecorationImage(
+                    image: DecorationImage(
                       fit: BoxFit.contain,
-                      image: AssetImage("assets/images/student.png"),
+                      image: NetworkImage(_viewModel.user.photoURL ?? ""),
                     ),
                     color: kWhite,
                     shape: BoxShape.circle,
@@ -134,16 +138,6 @@ class _MainScreenViewState extends ConsumerState<MainScreenView>
       ),
     );
   }
-
-  @override
-  void navigateToScreen(AppRoute appRoute, {Map<String, String>? params}) {
-    // TODO: implement navigateToScreen
-  }
-
-  @override
-  void showSnackbar(String message, {Color? color}) {
-    // TODO: implement showSnackbar
-  }
 }
 
 class _SliderView extends ConsumerStatefulWidget {
@@ -179,11 +173,13 @@ List<IconData> icons = [
 
 class _SliderViewState extends ConsumerState<_SliderView> {
   late final DashboardViewModel _viewModel;
+  late final MainScreenViewModel _mainScreenViewModel;
 
   @override
   void initState() {
     super.initState();
-    _viewModel = ref.read(dashboardViewModel);
+    _viewModel = ref.read(dashboardViewProviders);
+    _mainScreenViewModel = ref.read(mainScreenProvider);
     // _viewModel.attachView(this);
   }
 
@@ -204,16 +200,25 @@ class _SliderViewState extends ConsumerState<_SliderView> {
               child: CircleAvatar(
                 radius: 60,
                 backgroundImage: Image.network(
-                  'https://nikhilvadoliya.github.io/assets/images/nikhil_1.webp',
-                ).image,
+                        _mainScreenViewModel.user?.photoURL ?? "",
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Icon(Icons.error),
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          }
+                          return const CircularProgressIndicator();
+                        },
+                        fit: BoxFit.cover)
+                    .image,
               ),
             ),
           ),
           const SizedBox(
             height: 20,
           ),
-          const Text(
-            'Swapnil',
+          Text(
+            _mainScreenViewModel.user.displayName?.split(' ').first ?? "",
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.black,
@@ -262,7 +267,7 @@ class _SliderViewState extends ConsumerState<_SliderView> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppSizes.p16),
             child: Text(
-              " Goal",
+              "Goal",
               style: AppThemes.lightTheme.textTheme.bodySmall
                   ?.copyWith(color: primaryColor, fontWeight: FontWeight.bold),
             ),
@@ -302,7 +307,10 @@ class _SliderViewState extends ConsumerState<_SliderView> {
                 (index) => _SliderMenuItem(
                   iconData: icons[index],
                   title: items[index],
-                  onTap: () => _viewModel.navigate(index, context),
+                  onTap: () => {
+                    log("Item Clicked: ${index}"),
+                    if (index == 7) {_viewModel.handleSignOut(context, ref)}
+                  },
                 ),
               ),
             ],
