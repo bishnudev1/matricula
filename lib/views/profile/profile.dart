@@ -67,7 +67,8 @@ class _ProfileState extends ConsumerState<Profile> with BaseScreenView {
                   shape: BoxShape.circle,
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: NetworkImage(_viewModel.user.photoURL ?? ""),
+                    image: NetworkImage(_viewModel.user.photoURL ??
+                        "https://cdn-icons-png.flaticon.com/512/9131/9131529.png"),
                   ),
                 ),
               ),
@@ -75,7 +76,7 @@ class _ProfileState extends ConsumerState<Profile> with BaseScreenView {
             const SizedBox(height: AppSizes.p8),
             Center(
               child: Text(
-                _viewModel.user.displayName ?? "",
+                _viewModel.user.displayName ?? "Anonymous",
                 style: AppThemes.lightTheme.textTheme.bodySmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: primaryColor,

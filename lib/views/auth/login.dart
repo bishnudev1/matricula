@@ -7,6 +7,7 @@ import 'package:lottie/lottie.dart';
 import 'package:matricula/helpers/base_screen_view.dart';
 import 'package:matricula/utils/app_sizes.dart';
 import 'package:matricula/utils/colors.dart';
+import 'package:matricula/utils/showtoast.dart';
 import 'package:matricula/utils/themes.dart';
 // import 'package:matricula/view/screens/auth/auth_view_model.dart';
 import 'package:matricula/views/auth/auth_view_model.dart';
@@ -87,7 +88,10 @@ class _LoginState extends ConsumerState<Login> with BaseScreenView {
                   ),
                 ),
                 const SizedBox(height: AppSizes.p16),
-                Form(child: groupValue == 0 ? emailForm() : mobileForm()),
+                Form(
+                    child: groupValue == 0
+                        ? emailForm()
+                        : mobileForm(context, ref)),
                 const SizedBox(height: AppSizes.p16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -233,11 +237,13 @@ class _LoginState extends ConsumerState<Login> with BaseScreenView {
     );
   }
 
-  Column mobileForm() {
+  Column mobileForm(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
         TextFormField(
+          controller: ref.read(authViewModel).phoneNumberController,
           keyboardType: TextInputType.number,
+          validator: (value) => value!.length < 10 ? "Invalid Number" : null,
           decoration: const InputDecoration(
             prefixIcon: Padding(
               padding: EdgeInsets.all(16),
@@ -248,7 +254,7 @@ class _LoginState extends ConsumerState<Login> with BaseScreenView {
           ),
         ),
         Visibility(
-          visible: !isOtpReceived,
+          visible: !ref.watch(authViewModel).isOtpReceived,
           child: Container(
             alignment: Alignment.topRight,
             child: Column(
@@ -265,10 +271,23 @@ class _LoginState extends ConsumerState<Login> with BaseScreenView {
                   ),
 
                   // color: primaryColor,
-                  onPressed: () {
-                    setState(() {
-                      isOtpReceived = true;
-                    });
+                  onPressed: () async {
+                    if (ref
+                            .read(authViewModel)
+                            .phoneNumberController
+                            .text
+                            .isNotEmpty &&
+                        ref
+                                .read(authViewModel)
+                                .phoneNumberController
+                                .text
+                                .length ==
+                            10) {
+                      await ref.read(authViewModel).sendPhoneOtp(context, ref);
+                      ref.read(authViewModel).setOtpReceived(true);
+                    } else {
+                      showToast("Enter a valid number", context);
+                    }
                   },
                   child: const Text(
                     "Request OTP",
@@ -280,7 +299,7 @@ class _LoginState extends ConsumerState<Login> with BaseScreenView {
         ),
         const SizedBox(height: AppSizes.p8),
         Visibility(
-          visible: isOtpReceived,
+          visible: ref.watch(authViewModel).isOtpReceived,
           child: Padding(
             padding: const EdgeInsets.all(AppSizes.p16),
             child: Directionality(
@@ -295,15 +314,22 @@ class _LoginState extends ConsumerState<Login> with BaseScreenView {
                 // listenForMultipleSmsOnAndroid: true,
                 defaultPinTheme: AppThemes.pinputTheme,
                 validator: (value) {
-                  return value == '123456' ? null : 'Pin is incorrect';
+                  if (value!.length < 6) {
+                    return 'OTP must be 6 digits';
+                  }
+                  return null;
                 },
-                // onClipboardFound: (value) {
-                //   debugPrint('onClipboardFound: $value');
-                //   pinController.setText(value);
-                // },
                 hapticFeedbackType: HapticFeedbackType.lightImpact,
-                onCompleted: (pin) {
+                onCompleted: (pin) async {
                   debugPrint('onCompleted: $pin');
+                  if (pin.length == 6) {
+                    await ref
+                        .read(authViewModel)
+                        .verifyPhoneOtp(pin, context, ref);
+                    ref.read(authViewModel).setOtpReceived(false);
+                  } else {
+                    showToast("Invalid OTP", context);
+                  }
                 },
                 onChanged: (value) {
                   debugPrint('onChanged: $value');

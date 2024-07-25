@@ -78,7 +78,8 @@ class _MainScreenViewState extends ConsumerState<MainScreenView>
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.contain,
-                      image: NetworkImage(_viewModel.user.photoURL ?? ""),
+                      image: NetworkImage(_viewModel.user.photoURL ??
+                          "https://cdn-icons-png.flaticon.com/512/9131/9131529.png"),
                     ),
                     color: kWhite,
                     shape: BoxShape.circle,
@@ -200,7 +201,8 @@ class _SliderViewState extends ConsumerState<_SliderView> {
               child: CircleAvatar(
                 radius: 60,
                 backgroundImage: Image.network(
-                        _mainScreenViewModel.user?.photoURL ?? "",
+                        _mainScreenViewModel.user?.photoURL ??
+                            "https://cdn-icons-png.flaticon.com/512/9131/9131529.png",
                         errorBuilder: (context, error, stackTrace) =>
                             const Icon(Icons.error),
                         loadingBuilder: (context, child, loadingProgress) {
@@ -218,7 +220,8 @@ class _SliderViewState extends ConsumerState<_SliderView> {
             height: 20,
           ),
           Text(
-            _mainScreenViewModel.user.displayName?.split(' ').first ?? "",
+            _mainScreenViewModel.user.displayName?.split(' ').first ??
+                "Anonymous",
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.black,

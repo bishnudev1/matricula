@@ -71,7 +71,7 @@ class _DashboardState extends ConsumerState<Dashboard> with BaseScreenView {
                           children: [
                             Text(
                               _viewModel.user.displayName?.split(' ').first ??
-                                  "",
+                                  "Anonymous",
                               style: AppThemes.lightTheme.textTheme.bodyLarge
                                   ?.copyWith(
                                 fontWeight: FontWeight.bold,

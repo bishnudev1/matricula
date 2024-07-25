@@ -22,5 +22,6 @@ class ProfileViewModel extends BaseViewModel<BaseScreenView> {
   ProfileViewModel() {
     _user = FirebaseAuth.instance.currentUser;
     log("User: ${_user!.displayName}");
+    // log("User Photo URL: ${_user!.metadata["photoURL"]}");
   }
 }
