@@ -5,6 +5,7 @@ import 'package:firebase_core_platform_interface/firebase_core_platform_interfac
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:matricula/helpers/base_screen_view.dart';
 import 'package:matricula/helpers/base_view_model.dart';
 import 'package:matricula/app/app_routes.dart';
@@ -12,20 +13,50 @@ import 'package:matricula/providers/auth_providers.dart';
 import 'package:matricula/utils/navigate.dart';
 import 'package:matricula/utils/showtoast.dart';
 
+import '../../models/user_model.dart';
+
 final dashboardViewProviders =
     ChangeNotifierProvider((ref) => DashboardViewModel());
 
 class DashboardViewModel extends BaseViewModel<BaseScreenView> {
   bool isLoading = false;
 
-  User? _user;
+  UserModel? _user;
 
-  User get user => _user!;
+  UserModel? get user => _user;
 
   DashboardViewModel() {
-    _user = FirebaseAuth.instance.currentUser;
-    log("User: ${_user!.displayName}");
+    log("MainScreenViewModel is created");
+    getUser();
+    notifyListeners();
   }
+
+  getUser() {
+    var userBox = Hive.box<UserModel>('user');
+
+    if (userBox.getAt(0) == null) {
+      log("Local database is empty");
+      var data = FirebaseAuth.instance.currentUser;
+      if (data == null) {
+        log("Online database is empty");
+        return;
+      }
+      var user = userBox.add(
+        UserModel(
+          displayName: data!.displayName!,
+          email: data.email!,
+          photoURL: data.photoURL!,
+          uid: data.uid,
+          phoneNumber: "",
+        ),
+      );
+      _user = user as UserModel?;
+      notifyListeners();
+    } else {
+      _user = userBox.getAt(0);
+    }
+  }
+
   void showSnackbar(String message, BuildContext context) {
     // view?.showSnackbar("wohooo!!!!");
     showToast(message, context);

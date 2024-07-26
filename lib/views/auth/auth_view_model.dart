@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:matricula/helpers/base_screen_view.dart';
 import 'package:matricula/helpers/base_view_model.dart';
 import 'package:matricula/app/app_routes.dart';
+import 'package:matricula/models/user_model.dart';
 import 'package:matricula/providers/auth_providers.dart';
 import 'package:matricula/utils/navigate.dart';
 import 'package:matricula/utils/showtoast.dart';
@@ -139,9 +141,21 @@ class AuthViewModel extends BaseViewModel<BaseScreenView> {
     try {
       await ref.read(authProviders).handlePhoneOtpVerify(
           otp: pin,
-          onVerificationSuccess: () {
+          onVerificationSuccess: () async {
             log("OTP verified successfully, navigating to mainScreenView");
             // setOtpReceived(false);
+            final userBox = Hive.box<UserModel>('user');
+            await userBox.clear();
+            UserModel data = UserModel(
+              uid: FirebaseAuth.instance.currentUser!.uid,
+              displayName: "Anonymous",
+              email: "",
+              phoneNumber: FirebaseAuth.instance.currentUser!.phoneNumber,
+              photoURL:
+                  "https://img.freepik.com/free-vector/user-circles-set_78370-4704.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1721433600&semt=sph",
+            );
+            await userBox.add(data);
+            log("User: ${data.displayName}");
             context.go('/mainScreenView');
           },
           context: context);

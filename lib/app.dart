@@ -16,9 +16,9 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final goRouter = ref.watch(routerProvider);
     final themeManager = ref.watch(themeProvider);
-    final auth = ref.watch(authProviders);
+    // final auth = ref.watch(authProviders);
 
-    log("Signed in status: ${auth.isSignedIn}");
+    // log("Signed in status: ${auth.isSignedIn}");
 
     return MaterialApp.router(
       localizationsDelegates: context.localizationDelegates,

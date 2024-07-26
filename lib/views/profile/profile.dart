@@ -24,6 +24,8 @@ class _ProfileState extends ConsumerState<Profile> with BaseScreenView {
 
   @override
   Widget build(BuildContext context) {
+    final mainScreenViewModel = ref.watch(profileViewModel);
+    mainScreenViewModel.getUser();
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -54,80 +56,93 @@ class _ProfileState extends ConsumerState<Profile> with BaseScreenView {
         ],
       ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: AppSizes.p16),
-            Center(
-              child: Container(
-                height: 100,
-                width: 100,
-                decoration: BoxDecoration(
-                  border: Border.all(color: primaryColor, width: 2),
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(_viewModel.user.photoURL ??
-                        "https://cdn-icons-png.flaticon.com/512/9131/9131529.png"),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: AppSizes.p8),
-            Center(
-              child: Text(
-                _viewModel.user.displayName ?? "Anonymous",
-                style: AppThemes.lightTheme.textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: primaryColor,
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(AppSizes.p16),
-              margin: const EdgeInsets.all(AppSizes.p16),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                // color: primaryLightColor,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  items(key: "Mobile No", value: "+918910213903"),
-                  items(key: "WhatsApp No", value: "+918910213903"),
-                  items(key: "City/District", value: "Kolkata"),
-                  items(key: "Pincode", value: "+700054"),
-                  items(key: "Class", value: "12"),
-                  items(key: "School", value: "UEM"),
-                  items(key: "Address", value: "lorem ipsum jjfnk  kj "),
-                  SizedBox(
-                    width:
-                        MediaQuery.of(context).size.width - (AppSizes.p32 * 2),
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all(primaryColor),
-                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                        ),
-                      ),
-                      // style: ButtonStyle(),
-                      onPressed: () {
-                        setState(() {
-                          _viewModel.navigateToSubscription();
-                        });
-                      },
-                      child: const Text("Subscribe"),
+        child: Consumer(builder: (context, ref, child) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: AppSizes.p16),
+              Center(
+                child: Container(
+                  height: 100,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: primaryColor, width: 2),
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(ref
+                              .watch(profileViewModel)
+                              .user!
+                              .photoURL ??
+                          "https://cdn-icons-png.flaticon.com/512/9131/9131529.png"),
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
-          ],
-        ),
+              const SizedBox(height: AppSizes.p8),
+              Center(
+                child: Text(
+                  ref.watch(profileViewModel).user?.displayName ?? "Anonymous",
+                  style: AppThemes.lightTheme.textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: primaryColor,
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(AppSizes.p16),
+                margin: const EdgeInsets.all(AppSizes.p16),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  // color: primaryLightColor,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    items(
+                        key: "Mobile No",
+                        value: ref.watch(profileViewModel).user?.phoneNumber ??
+                            ""),
+                    items(
+                        key: "WhatsApp No",
+                        value: ref.watch(profileViewModel).user?.phoneNumber ??
+                            ""),
+                    items(key: "City/District", value: "Kolkata"),
+                    items(key: "Pincode", value: "+700054"),
+                    items(key: "Class", value: "12"),
+                    items(key: "School", value: "UEM"),
+                    items(key: "Address", value: "lorem ipsum jjfnk  kj "),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width -
+                          (AppSizes.p32 * 2),
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              WidgetStateProperty.all(primaryColor),
+                          shape:
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
+                        ),
+                        // style: ButtonStyle(),
+                        onPressed: () {
+                          setState(() {
+                            _viewModel.navigateToSubscription();
+                          });
+                        },
+                        child: const Text("Subscribe"),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        }),
       ),
     );
   }

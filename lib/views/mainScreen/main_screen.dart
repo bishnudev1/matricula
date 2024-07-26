@@ -25,15 +25,26 @@ class _MainScreenViewState extends ConsumerState<MainScreenView>
   late final DashboardViewModel _viewModel;
   final GlobalKey<SliderDrawerState> _sliderDrawerKey =
       GlobalKey<SliderDrawerState>();
+
   @override
   void initState() {
     super.initState();
     _viewModel = ref.read(dashboardViewProviders);
     _viewModel.attachView(this);
+    log("MainScreenView is created");
+  }
+
+  @override
+  void dispose() {
+    _viewModel.detachView();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    log("MainScreenView is build");
+    final user = ref.watch(mainScreenProvider).user;
+    _viewModel.getUser();
     return Scaffold(
       body: SliderDrawer(
         isCupertino: true,
@@ -47,12 +58,6 @@ class _MainScreenViewState extends ConsumerState<MainScreenView>
                 width: 50,
                 margin: const EdgeInsets.all(AppSizes.p8),
                 decoration: BoxDecoration(
-                  // image: const DecorationImage(
-                  //   fit: BoxFit.contain,
-                  //   image: AssetImage(
-                  //     "assets/images/notification.png",
-                  //   ),
-                  // ),
                   color: kWhite,
                   shape: BoxShape.circle,
                   boxShadow: [
@@ -70,28 +75,34 @@ class _MainScreenViewState extends ConsumerState<MainScreenView>
               ),
               InkWell(
                 onTap: () => _viewModel.navigateToprofile(context),
-                child: Container(
-                  height: 90,
-                  width: 50,
-                  margin: const EdgeInsets.all(AppSizes.p8),
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.contain,
-                      image: NetworkImage(_viewModel.user.photoURL ??
-                          "https://cdn-icons-png.flaticon.com/512/9131/9131529.png"),
-                    ),
-                    color: kWhite,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: kBlack.withOpacity(0.2),
-                        spreadRadius: 1,
-                        blurRadius: 2,
+                child: Consumer(builder: (context, ref, child) {
+                  log("Image URL Changed: ${user?.photoURL}");
+                  return Container(
+                    height: 90,
+                    width: 50,
+                    margin: const EdgeInsets.all(AppSizes.p8),
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.contain,
+                        image: NetworkImage(ref
+                                .watch(mainScreenProvider.notifier)
+                                .user
+                                ?.photoURL ??
+                            "https://cdn-icons-png.flaticon.com/512/9131/9131529.png"),
                       ),
-                    ],
-                  ),
-                ),
+                      color: kWhite,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: kBlack.withOpacity(0.2),
+                          spreadRadius: 1,
+                          blurRadius: 2,
+                        ),
+                      ],
+                    ),
+                  );
+                }),
               ),
             ],
           ),
@@ -150,42 +161,44 @@ class _SliderView extends ConsumerStatefulWidget {
   ConsumerState<_SliderView> createState() => _SliderViewState();
 }
 
-List<String> items = [
-  "Library",
-  "Download",
-  "Live Classes",
-  "Progress",
-  "Subscribe Now",
-  "Refer & Earn",
-  "Terms & Conditions",
-  "Logout",
-];
-
-List<IconData> icons = [
-  Icons.library_add,
-  Icons.download,
-  Icons.video_call,
-  Icons.analytics,
-  Icons.shopping_bag,
-  Icons.share,
-  Icons.settings,
-  Icons.logout,
-];
-
 class _SliderViewState extends ConsumerState<_SliderView> {
   late final DashboardViewModel _viewModel;
   late final MainScreenViewModel _mainScreenViewModel;
+
+  final List<String> items = [
+    "Library",
+    "Download",
+    "Live Classes",
+    "Progress",
+    "Subscribe Now",
+    "Refer & Earn",
+    "Terms & Conditions",
+    "Logout",
+  ];
+
+  final List<IconData> icons = [
+    Icons.library_add,
+    Icons.download,
+    Icons.video_call,
+    Icons.analytics,
+    Icons.shopping_bag,
+    Icons.share,
+    Icons.settings,
+    Icons.logout,
+  ];
 
   @override
   void initState() {
     super.initState();
     _viewModel = ref.read(dashboardViewProviders);
     _mainScreenViewModel = ref.read(mainScreenProvider);
-    // _viewModel.attachView(this);
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(mainScreenProvider).user;
+    _mainScreenViewModel.getUser();
+
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.only(top: 30),
@@ -201,7 +214,7 @@ class _SliderViewState extends ConsumerState<_SliderView> {
               child: CircleAvatar(
                 radius: 60,
                 backgroundImage: Image.network(
-                        _mainScreenViewModel.user?.photoURL ??
+                        user?.photoURL ??
                             "https://cdn-icons-png.flaticon.com/512/9131/9131529.png",
                         errorBuilder: (context, error, stackTrace) =>
                             const Icon(Icons.error),
@@ -220,10 +233,9 @@ class _SliderViewState extends ConsumerState<_SliderView> {
             height: 20,
           ),
           Text(
-            _mainScreenViewModel.user.displayName?.split(' ').first ??
-                "Anonymous",
+            user?.displayName?.split(' ').first ?? "Anonymous",
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 30,
@@ -302,7 +314,6 @@ class _SliderViewState extends ConsumerState<_SliderView> {
               ],
             ),
           ),
-
           Column(
             children: [
               ...List.generate(
@@ -311,31 +322,13 @@ class _SliderViewState extends ConsumerState<_SliderView> {
                   iconData: icons[index],
                   title: items[index],
                   onTap: () => {
-                    log("Item Clicked: ${index}"),
+                    log("Item Clicked: $index"),
                     if (index == 7) {_viewModel.handleSignOut(context, ref)}
                   },
                 ),
               ),
             ],
           ),
-          // ...[
-
-          //   Menu(
-          //     Icons.library_add,
-          //     'Library',
-          //   ),
-          //   _SliderMenuItem(iconData: Icons.video_call,title:  'Live Classes'),
-          //   Menu(Icons.analytics, 'Progress'),
-          //   Menu(Icons.shopping_bag, 'Subscribe Now'),
-          //   Menu(Icons.share, 'Refer & Earn'),
-          //   Menu(Icons.settings, 'Terms & Conditions'),
-          //   Menu(Icons.logout, 'Logout')
-          // ]
-          //     .map((menu) => _SliderMenuItem(
-          //           title: menu.title,
-          //           iconData: menu.iconData,
-          //         ))
-          //     .toList(),
         ],
       ),
     );
@@ -355,12 +348,6 @@ class _SliderMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return ListTile(
-    //     title: Text(title,
-    //         style: const TextStyle(
-    //             color: Colors.black, fontFamily: 'BalsamiqSans_Regular')),
-    //     leading: Icon(iconData, color: Colors.black),
-    //     onTap: () => onTap?.call(title));
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -384,11 +371,4 @@ class _SliderMenuItem extends StatelessWidget {
       ),
     );
   }
-}
-
-class Menu {
-  final IconData iconData;
-  final String title;
-
-  Menu(this.iconData, this.title);
 }

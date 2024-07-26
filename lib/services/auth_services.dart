@@ -9,9 +9,11 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:matricula/models/user_model.dart';
 import 'package:matricula/utils/showtoast.dart';
 
-class AuthServices {
+class AuthServices extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   GoogleSignIn? googleSignIn;
 
@@ -38,6 +40,13 @@ class AuthServices {
       final User? user = authResult.user;
       log(user!.photoURL.toString());
       if (user != null) {
+        saveLocaleUser(
+          displayName: user.displayName!,
+          email: user.email!,
+          photoURL: user.photoURL!,
+          uid: user.uid,
+          phoneNumber: "",
+        );
         context.go('/mainScreenView');
         return user;
       } else {
@@ -66,6 +75,13 @@ class AuthServices {
         final User? user = authResult.user;
         log(user!.photoURL.toString());
         if (user != null) {
+          saveLocaleUser(
+            displayName: user.displayName!,
+            email: user.email!,
+            photoURL: user.photoURL!,
+            uid: user.uid,
+            phoneNumber: "",
+          );
           context.go('/mainScreenView');
           return user;
         } else {
@@ -88,6 +104,7 @@ class AuthServices {
 
   Future<void> signOut(BuildContext context) async {
     try {
+      var userBox = await Hive.openBox<UserModel>('user');
       await _auth.signOut();
       if (googleSignIn != null) {
         await googleSignIn!.signOut();
@@ -95,6 +112,8 @@ class AuthServices {
       if (FacebookAuth.instance != null) {
         await FacebookAuth.instance.logOut();
       }
+      await userBox.clear();
+      showToast("You've been signed out", context);
       context.go('/login');
     } on PlatformException catch (e) {
       log(e.message.toString());
@@ -106,6 +125,18 @@ class AuthServices {
       log(e.toString());
       return null;
     }
+  }
+
+  deleteData(BuildContext context) async {
+    await _auth.signOut();
+    if (googleSignIn != null) {
+      await googleSignIn!.signOut();
+    }
+    if (FacebookAuth.instance != null) {
+      await FacebookAuth.instance.logOut();
+    }
+    showToast("You've been signed out", context);
+    context.go('/login');
   }
 
   Future<User?> handleSentPhoneOtp({
@@ -218,5 +249,38 @@ class AuthServices {
       showToast("Network Error!", context);
       return null;
     }
+  }
+
+  saveLocaleUser({
+    required String displayName,
+    required String email,
+    required String photoURL,
+    required String uid,
+    required String phoneNumber,
+  }) async {
+    var userBox = await Hive.openBox<UserModel>('user');
+
+    if (userBox.isNotEmpty) {
+      await userBox.clear();
+    }
+
+    // await userBox.clear();
+
+    UserModel user = UserModel(
+      displayName: displayName,
+      email: email,
+      photoURL: photoURL,
+      uid: uid,
+      phoneNumber: phoneNumber,
+    );
+
+    await userBox.add(user);
+    notifyListeners();
+  }
+
+  clearCache() async {
+    var userBox = await Hive.openBox<UserModel>('user');
+    await userBox.clear();
+    notifyListeners();
   }
 }

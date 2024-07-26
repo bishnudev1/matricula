@@ -54,7 +54,7 @@ class Environment {
     } catch (e) {
       Logger.write(e.toString());
     }
-    var userBox = await Hive.openBox<UserModel>('user');
+    final userBox = await Hive.openBox<UserModel>('user');
     log("UserBox is open: ${userBox.isOpen}, UserBox is empty: ${userBox.isEmpty}, UserBox length: ${userBox.length}, UserBox values: ${userBox.values}");
 
     runApp(

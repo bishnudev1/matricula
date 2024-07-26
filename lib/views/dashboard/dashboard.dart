@@ -70,7 +70,7 @@ class _DashboardState extends ConsumerState<Dashboard> with BaseScreenView {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              _viewModel.user.displayName?.split(' ').first ??
+                              _viewModel.user?.displayName?.split(' ').first ??
                                   "Anonymous",
                               style: AppThemes.lightTheme.textTheme.bodyLarge
                                   ?.copyWith(
